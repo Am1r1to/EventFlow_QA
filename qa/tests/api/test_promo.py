@@ -52,6 +52,7 @@ def test_disable_promo():
     assert r2.json()["expires_at"] is not None
 
 
+
 def test_client_cant_see_promos():
     r = requests.post(
         URL + "/api/auth/token",

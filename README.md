@@ -7,6 +7,8 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Am1r1to_EventFlow_QA&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Am1r1to_EventFlow_QA)
+[![Security issues](https://sonarcloud.io/api/project_badges/measure?project=Am1r1to_EventFlow_QA&metric=software_quality_security_issues)](https://sonarcloud.io/summary/new_code?id=Am1r1to_EventFlow_QA)
 
 eventflow est une application web réaliste à trois tiers (React, FastAPI, PostgreSQL) qui permet à des organisateurs de mettre en vente des billets pour leurs événements, et au public de réserver et payer en ligne. Elle sert de fil rouge à la formation Testeur QA : les stagiaires l'explorent, la testent et l'industrialisent tout au long du programme, du test manuel jusqu'à la chaîne CI/CD.
 
@@ -66,14 +68,14 @@ Le frontend appelle l'API via un proxy `/api` (configuré dans `vite.config.js`)
 
 ## Stack technique
 
-| Couche          | Technologies                                                        |
-|-----------------|---------------------------------------------------------------------|
-| Base de données | PostgreSQL 16                                                       |
-| API             | FastAPI, SQLAlchemy 2, Pydantic 2, OAuth2 / JWT (python-jose), bcrypt |
-| Billet PDF      | reportlab, qrcode                                                   |
-| Frontend        | React 19, Vite 8, React Router 8, axios                            |
-| Design          | Clash Display, Inter, FontAwesome                                  |
-| Conteneurisation | Docker, Docker Compose                                             |
+| Couche           | Technologies                                                          |
+| ---------------- | --------------------------------------------------------------------- |
+| Base de données  | PostgreSQL 16                                                         |
+| API              | FastAPI, SQLAlchemy 2, Pydantic 2, OAuth2 / JWT (python-jose), bcrypt |
+| Billet PDF       | reportlab, qrcode                                                     |
+| Frontend         | React 19, Vite 8, React Router 8, axios                               |
+| Design           | Clash Display, Inter, FontAwesome                                     |
+| Conteneurisation | Docker, Docker Compose                                                |
 
 ## Prérequis
 
@@ -90,12 +92,12 @@ docker compose up --build
 
 Services disponibles :
 
-| Service     | URL                              |
-|-------------|----------------------------------|
-| Frontend    | http://localhost:5173            |
-| API         | http://localhost:8000            |
-| Documentation Swagger | http://localhost:8000/docs |
-| PostgreSQL  | localhost:5432 (`eventflow` / `eventflow`) |
+| Service               | URL                                        |
+| --------------------- | ------------------------------------------ |
+| Frontend              | http://localhost:5173                      |
+| API                   | http://localhost:8000                      |
+| Documentation Swagger | http://localhost:8000/docs                 |
+| PostgreSQL            | localhost:5432 (`eventflow` / `eventflow`) |
 
 Au premier lancement, le backend crée les tables et injecte les données de démonstration. Le code (`backend/app` et `frontend/src`) est monté en volume : les modifications sont rechargées à chaud (uvicorn `--reload` et HMR Vite). Une reconstruction n'est nécessaire que lorsque les dépendances changent :
 
@@ -128,14 +130,14 @@ npm run dev
 
 Le backend se configure par variables d'environnement (voir `backend/.env.example`).
 
-| Variable               | Défaut                                                            | Description                                    |
-|------------------------|------------------------------------------------------------------|------------------------------------------------|
-| `DATABASE_URL`         | `postgresql+psycopg2://eventflow:eventflow@db:5432/eventflow`     | Chaîne de connexion SQLAlchemy                 |
-| `JWT_SECRET`           | `dev-secret-change-me`                                            | Secret de signature des jetons JWT             |
-| `ACCESS_TOKEN_MINUTES` | `120`                                                            | Durée de validité d'un jeton                   |
-| `RESERVATION_MINUTES`  | `10`                                                             | Durée d'une réservation avant expiration       |
-| `SEED_BUGS`            | `false`                                                          | Active les bugs pédagogiques du fil rouge      |
-| `CORS_ORIGINS`         | `http://localhost:5173`                                          | Origines autorisées (séparées par des virgules) |
+| Variable               | Défaut                                                        | Description                                     |
+| ---------------------- | ------------------------------------------------------------- | ----------------------------------------------- |
+| `DATABASE_URL`         | `postgresql+psycopg2://eventflow:eventflow@db:5432/eventflow` | Chaîne de connexion SQLAlchemy                  |
+| `JWT_SECRET`           | `dev-secret-change-me`                                        | Secret de signature des jetons JWT              |
+| `ACCESS_TOKEN_MINUTES` | `120`                                                         | Durée de validité d'un jeton                    |
+| `RESERVATION_MINUTES`  | `10`                                                          | Durée d'une réservation avant expiration        |
+| `SEED_BUGS`            | `false`                                                       | Active les bugs pédagogiques du fil rouge       |
+| `CORS_ORIGINS`         | `http://localhost:5173`                                       | Origines autorisées (séparées par des virgules) |
 
 En production, `JWT_SECRET` doit impérativement être remplacé par une valeur secrète et aléatoire.
 
@@ -143,26 +145,26 @@ En production, `JWT_SECRET` doit impérativement être remplacé par une valeur 
 
 Comptes créés par le seed :
 
-| Rôle           | Email                    | Mot de passe |
-|----------------|--------------------------|--------------|
-| Administrateur | admin@eventflow.test     | admin1234    |
-| Organisateur   | orga@eventflow.test      | orga1234     |
-| Client         | client@eventflow.test    | client1234   |
+| Rôle           | Email                 | Mot de passe |
+| -------------- | --------------------- | ------------ |
+| Administrateur | admin@eventflow.test  | admin1234    |
+| Organisateur   | orga@eventflow.test   | orga1234     |
+| Client         | client@eventflow.test | client1234   |
 
 Codes promo :
 
-| Code        | Réduction | Remarque                |
-|-------------|-----------|-------------------------|
-| `WELCOME10` | 10 %      | Valide                  |
-| `VIP25`     | 25 %      | Valide                  |
+| Code        | Réduction | Remarque                 |
+| ----------- | --------- | ------------------------ |
+| `WELCOME10` | 10 %      | Valide                   |
+| `VIP25`     | 25 %      | Valide                   |
 | `EXPIRED`   | 15 %      | Expiré (utile aux tests) |
 
 Cartes de paiement simulées (page de paiement) :
 
-| Numéro                 | Résultat        |
-|------------------------|-----------------|
-| `4242 4242 4242 4242`  | Paiement accepté |
-| `4000 0000 0000 0002`  | Paiement refusé  |
+| Numéro                | Résultat         |
+| --------------------- | ---------------- |
+| `4242 4242 4242 4242` | Paiement accepté |
+| `4000 0000 0000 0002` | Paiement refusé  |
 
 La date d'expiration (future) et le CVC sont libres. Aucune donnée de carte n'est stockée : il s'agit d'une simulation.
 
@@ -172,42 +174,42 @@ Base : `http://localhost:8000`. Documentation interactive : `/docs`.
 
 Authentification :
 
-| Méthode | Route                  | Accès    | Description                       |
-|---------|------------------------|----------|-----------------------------------|
-| POST    | `/api/auth/register`        | Public   | Créer un compte                   |
-| POST    | `/api/auth/token`           | Public   | Connexion (OAuth2, renvoie un JWT) |
-| GET     | `/api/auth/me`              | Connecté | Profil de l'utilisateur courant   |
+| Méthode | Route                       | Accès    | Description                                |
+| ------- | --------------------------- | -------- | ------------------------------------------ |
+| POST    | `/api/auth/register`        | Public   | Créer un compte                            |
+| POST    | `/api/auth/token`           | Public   | Connexion (OAuth2, renvoie un JWT)         |
+| GET     | `/api/auth/me`              | Connecté | Profil de l'utilisateur courant            |
 | PATCH   | `/api/auth/me`              | Connecté | Modifier ses informations (nom, téléphone) |
-| POST    | `/api/auth/me/avatar`       | Connecté | Définir la photo de profil        |
-| DELETE  | `/api/auth/me/avatar`       | Connecté | Retirer la photo de profil        |
-| POST    | `/api/auth/change-password` | Connecté | Changer son mot de passe          |
+| POST    | `/api/auth/me/avatar`       | Connecté | Définir la photo de profil                 |
+| DELETE  | `/api/auth/me/avatar`       | Connecté | Retirer la photo de profil                 |
+| POST    | `/api/auth/change-password` | Connecté | Changer son mot de passe                   |
 
 Catalogue et réservations :
 
-| Méthode | Route                       | Accès    | Description                          |
-|---------|-----------------------------|----------|--------------------------------------|
-| GET     | `/api/events`               | Public   | Catalogue (filtres `q`, `city`)      |
-| GET     | `/api/events/{id}`          | Public   | Détail et disponibilité par catégorie |
-| POST    | `/api/orders`               | Connecté | Créer une réservation (dix minutes)  |
-| GET     | `/api/orders/me`            | Connecté | Mes commandes                        |
-| GET     | `/api/orders/{id}`          | Connecté | Détail d'une commande (propriétaire) |
-| POST    | `/api/orders/{id}/pay`      | Connecté | Payer une réservation                |
-| GET     | `/api/orders/{id}/ticket`   | Connecté | Billet PDF avec QR code              |
+| Méthode | Route                     | Accès    | Description                           |
+| ------- | ------------------------- | -------- | ------------------------------------- |
+| GET     | `/api/events`             | Public   | Catalogue (filtres `q`, `city`)       |
+| GET     | `/api/events/{id}`        | Public   | Détail et disponibilité par catégorie |
+| POST    | `/api/orders`             | Connecté | Créer une réservation (dix minutes)   |
+| GET     | `/api/orders/me`          | Connecté | Mes commandes                         |
+| GET     | `/api/orders/{id}`        | Connecté | Détail d'une commande (propriétaire)  |
+| POST    | `/api/orders/{id}/pay`    | Connecté | Payer une réservation                 |
+| GET     | `/api/orders/{id}/ticket` | Connecté | Billet PDF avec QR code               |
 
 Back-office (rôles `organizer` ou `admin`, sinon 403) :
 
-| Méthode  | Route                                  | Description                       |
-|----------|----------------------------------------|-----------------------------------|
-| GET      | `/api/admin/summary`                   | Totaux (événements, ventes, CA)   |
-| GET      | `/api/admin/events`                    | Liste avec ventes et remplissage  |
-| POST     | `/api/admin/events`                    | Créer un événement et ses catégories |
-| GET      | `/api/admin/events/{id}`               | Statistiques détaillées           |
-| PUT      | `/api/admin/events/{id}`               | Modifier un événement             |
-| POST     | `/api/admin/events/{id}/categories`    | Ajouter une catégorie de billets  |
-| GET      | `/api/admin/events/{id}/orders`        | Commandes et participants         |
-| GET, POST | `/api/admin/promo`                    | Lister, créer un code promo       |
-| PUT      | `/api/admin/promo/{id}`                | Modifier un code promo            |
-| POST     | `/api/admin/promo/{id}/disable`        | Désactiver un code promo          |
+| Méthode   | Route                               | Description                          |
+| --------- | ----------------------------------- | ------------------------------------ |
+| GET       | `/api/admin/summary`                | Totaux (événements, ventes, CA)      |
+| GET       | `/api/admin/events`                 | Liste avec ventes et remplissage     |
+| POST      | `/api/admin/events`                 | Créer un événement et ses catégories |
+| GET       | `/api/admin/events/{id}`            | Statistiques détaillées              |
+| PUT       | `/api/admin/events/{id}`            | Modifier un événement                |
+| POST      | `/api/admin/events/{id}/categories` | Ajouter une catégorie de billets     |
+| GET       | `/api/admin/events/{id}/orders`     | Commandes et participants            |
+| GET, POST | `/api/admin/promo`                  | Lister, créer un code promo          |
+| PUT       | `/api/admin/promo/{id}`             | Modifier un code promo               |
+| POST      | `/api/admin/promo/{id}/disable`     | Désactiver un code promo             |
 
 ## Parcours fonctionnel
 
@@ -220,13 +222,13 @@ Back-office (rôles `organizer` ou `admin`, sinon 403) :
 
 ## Règles métier
 
-| Code | Règle                                                                       |
-|------|-----------------------------------------------------------------------------|
-| RM1  | Le nombre de places vendues ne dépasse jamais la capacité disponible.       |
-| RM2  | Une réservation non payée expire après dix minutes et libère le stock.      |
-| RM3  | Maximum six billets par commande.                                           |
-| RM4  | Un code promo a un nombre d'usages maximum et une date d'expiration.        |
-| RM7  | Un client ne peut consulter que ses propres commandes et billets.           |
+| Code | Règle                                                                  |
+| ---- | ---------------------------------------------------------------------- |
+| RM1  | Le nombre de places vendues ne dépasse jamais la capacité disponible.  |
+| RM2  | Une réservation non payée expire après dix minutes et libère le stock. |
+| RM3  | Maximum six billets par commande.                                      |
+| RM4  | Un code promo a un nombre d'usages maximum et une date d'expiration.   |
+| RM7  | Un client ne peut consulter que ses propres commandes et billets.      |
 
 Les règles RM5 (tarif early bird limité) et RM6 (remboursement jusqu'à 48 h avant l'événement) seront ajoutées dans les itérations suivantes.
 
@@ -234,26 +236,26 @@ Les règles RM5 (tarif early bird limité) et RM6 (remboursement jusqu'à 48 h a
 
 Le schéma relationnel de référence est disponible dans `db/schema.sql` (il sert au module SQL). Les tables sont également créées automatiquement par SQLAlchemy au démarrage.
 
-| Table               | Rôle                                                       |
-|---------------------|------------------------------------------------------------|
+| Table               | Rôle                                                                        |
+| ------------------- | --------------------------------------------------------------------------- |
 | `users`             | Comptes, rôles (`client`, `organizer`, `admin`), profil (téléphone, avatar) |
-| `events`            | Événements (titre, ville, date, capacité, statut)          |
-| `ticket_categories` | Catégories tarifaires d'un événement (prix, quota)         |
-| `orders`            | Commandes (statut, total, expiration)                      |
-| `order_items`       | Lignes de commande (catégorie, quantité, prix unitaire)    |
-| `payments`          | Paiements associés aux commandes                           |
-| `promo_codes`       | Codes promo (réduction, usages, expiration)                |
-| `refunds`           | Remboursements                                             |
+| `events`            | Événements (titre, ville, date, capacité, statut)                           |
+| `ticket_categories` | Catégories tarifaires d'un événement (prix, quota)                          |
+| `orders`            | Commandes (statut, total, expiration)                                       |
+| `order_items`       | Lignes de commande (catégorie, quantité, prix unitaire)                     |
+| `payments`          | Paiements associés aux commandes                                            |
+| `promo_codes`       | Codes promo (réduction, usages, expiration)                                 |
+| `refunds`           | Remboursements                                                              |
 
 ## Charte graphique
 
-| Couleur | Code      | Usage                         |
-|---------|-----------|-------------------------------|
-| Ink     | `#15131E` | Texte, surfaces sombres       |
-| Flux    | `#6C4DF6` | Couleur primaire, actions     |
-| Spark   | `#FF5B4A` | Accent                        |
-| Mint    | `#1FD6A6` | Succès, disponibilité         |
-| Paper   | `#F6F5F2` | Fond d'application            |
+| Couleur | Code      | Usage                     |
+| ------- | --------- | ------------------------- |
+| Ink     | `#15131E` | Texte, surfaces sombres   |
+| Flux    | `#6C4DF6` | Couleur primaire, actions |
+| Spark   | `#FF5B4A` | Accent                    |
+| Mint    | `#1FD6A6` | Succès, disponibilité     |
+| Paper   | `#F6F5F2` | Fond d'application        |
 
 Typographie : Clash Display (titres) et Inter (interface). Iconographie : FontAwesome, sans emoji. Les fichiers de marque (logo, brand board) se trouvent dans le dossier `brand/`.
 
@@ -313,4 +315,4 @@ Connexion impossible avec une erreur 500 mentionnant un email invalide : les adr
 
 Réservation affichée comme « expirée » dès la page de paiement : signe d'une date interprétée dans le mauvais fuseau. L'API renvoie des dates en UTC explicite (suffixe `Z`) et le frontend les parse comme UTC. Conservez ce contrat si vous ajoutez des dates.
 
-Colonnes de profil (`phone`, `avatar`) absentes sur une base ancienne : le backend les ajoute automatiquement au démarrage via une migration idempotente (`ALTER TABLE ... ADD COLUMN`). Un redémarrage du 
+Colonnes de profil (`phone`, `avatar`) absentes sur une base ancienne : le backend les ajoute automatiquement au démarrage via une migration idempotente (`ALTER TABLE ... ADD COLUMN`). Un redémarrage du
