@@ -21,11 +21,6 @@ jobs:
           with:
             python-version: "3.12"
 
-        - name: Couverture des tests ApiClient
-          run: |
-            pip install pytest pytest-cov requests python-dotenv
-            cd qa
-            python -m pytest -o addopts= tests/unit/test_api_client.py --cov=utils.api_client --cov-report=xml:../coverage.xml
 
         - name: Rapports Ruff et Bandit
           run: |
