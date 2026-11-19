@@ -27,7 +27,10 @@ def create_event(admin: ApiClient, status="published", early_quota=50, full_quot
         ],
     }
     r = admin.post("/api/admin/events", json=payload)
-    assert r.status_code == 201, r.text
+
+    if r.status_code != 201:
+        raise AssertionError(f"Création événement échouée : {r.status_code} - {r.text}")
+
     return r.json()
 
 
@@ -35,7 +38,10 @@ def register_user(api: ApiClient, password=None):
     password = password or unique("password")
     email = f"{unique('user')}@example.com"
     r = api.post("/api/auth/register", json={"email": email, "password": password, "full_name": "QA User"})
-    assert r.status_code == 201, r.text
+
+    if r.status_code != 201:
+        raise AssertionError(f"Inscription utilisateur échouée : {r.status_code} - {r.text}")
+
     return email, password
 
 
