@@ -1,5 +1,4 @@
 import re
-import time
 
 import pytest
 from playwright.sync_api import Page, expect
@@ -7,7 +6,7 @@ from playwright.sync_api import Page, expect
 pytestmark = pytest.mark.ui
 
 
-@pytest.mark.flaky(reruns=3)
+# @pytest.mark.flaky(reruns=3)
 def test_full_booking_flow_until_confirmation(logged_in_page: Page, qa_event):
     page = logged_in_page
     page.goto(f"/events/{qa_event['id']}")
@@ -16,10 +15,13 @@ def test_full_booking_flow_until_confirmation(logged_in_page: Page, qa_event):
 
     expect(page.get_by_text(re.compile(r"Reservation tenue encore \d{2}:\d{2}"))).to_be_visible()
     page.get_by_placeholder("Camille Client").fill("QA Bot")
-    time.sleep(2)  # le bouton payer ne marche pas toujours du premier coup, on attend un peu
+    # time.sleep(2)  # le bouton payer ne marche pas toujours du premier coup, on attend un peu
+    expect(page.get_by_role("button", name=re.compile("^Payer"))).to_be_enabled()
+
     page.get_by_role("button", name=re.compile("^Payer")).click()
 
     expect(page.get_by_role("heading", name="Paiement confirme")).to_be_visible(timeout=10000)
+    # *   Je dois attendre la réponse
     expect(page.get_by_text(re.compile(r"REF-\d{5}"))).to_be_visible()
 
 
