@@ -1,4 +1,5 @@
 """Petit client HTTP pour l'API EventFlow."""
+
 import requests
 
 from utils.config import API_URL
@@ -8,7 +9,7 @@ class ApiClient:
     def __init__(self, base_url=API_URL, token=None):
         self.base_url = base_url.rstrip("/")
         self.session = requests.Session()
-        self.session.verify = False  # certificat auto-signe sur l'env de recette
+        self.session.verify = True
         if token:
             self.set_token(token)
 
@@ -16,10 +17,10 @@ class ApiClient:
         self.session.headers["Authorization"] = f"Bearer {token}"
 
     def login(self, email, password):
-        r = requests.post(
+        r = self.session.post(
             f"{self.base_url}/api/auth/token",
             data={"username": email, "password": password},
-            verify=False,
+            timeout=10,
         )
         if r.status_code == 200:
             self.set_token(r.json()["access_token"])
@@ -45,10 +46,13 @@ class ApiClient:
         return self.post("/api/orders", json=payload)
 
     def pay(self, order_id, card_number):
-        return self.post(f"/api/orders/{order_id}/pay", json={
-            "card_number": card_number,
-            "exp_month": 12,
-            "exp_year": 2030,
-            "cvc": "123",
-            "cardholder": "QA Bot",
-        })
+        return self.post(
+            f"/api/orders/{order_id}/pay",
+            json={
+                "card_number": card_number,
+                "exp_month": 12,
+                "exp_year": 2030,
+                "cvc": "123",
+                "cardholder": "QA Bot",
+            },
+        )
